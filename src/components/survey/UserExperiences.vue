@@ -7,7 +7,11 @@
           >Load Submitted Experiences</base-button
         >
       </div>
-      <ul>
+      <p v-if="isLoading">Loading ...</p>
+      <p v-else-if="!isLoading && (!results || results.length === 0)">
+        No storages experiences found.
+      </p>
+      <ul v-else-if="!isLoading && results.length > 0">
         <survey-result
           v-for="result in results"
           :key="result.id"
@@ -30,13 +34,16 @@ export default {
   data() {
     return {
       results: [],
+      isLoading: false,
     };
   },
   methods: {
     loadExperiences() {
-      const url =
+      this.isLoading = true;
+      const surveysUrl =
         'https://vue-http-demo-7f5e9-default-rtdb.asia-southeast1.firebasedatabase.app/surveys.json';
-      fetch(url)
+      // const newUrl =  ''
+      fetch(surveysUrl)
         .then((res) => {
           // Check if the request is succesful or not
           if (res.ok) {
@@ -45,6 +52,7 @@ export default {
         })
         .then((data) => {
           // console.log(data);
+          this.isLoading = false;
           const getResults = [];
           for (const id in data) {
             getResults.push({
@@ -54,9 +62,12 @@ export default {
             });
           }
           this.results = getResults;
-          console.log(`We get ${this.results[1]}.`)
+          console.log(`We get ${this.results[1]}.`);
         });
     },
+  },
+  mounted() {
+    this.loadExperiences();
   },
 };
 </script>
