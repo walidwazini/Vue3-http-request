@@ -50,6 +50,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -73,17 +75,11 @@ export default {
       // });
       const url =
         'https://vue-http-demo-7f5e9-default-rtdb.asia-southeast1.firebasedatabase.app/surveys.json';
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: this.enteredName,
-          rating: this.chosenRating,
-        }),
-      });
 
+      axios.post(url, {
+        name: this.enteredName,
+        rating: this.chosenRating,
+      });
       this.enteredName = '';
       this.chosenRating = null;
     },
